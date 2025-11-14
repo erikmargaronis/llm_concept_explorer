@@ -27,7 +27,7 @@ st.subheader("Temperature-Scaled Sampling")
 
 probabilities = probabilities / np.sum(probabilities)
 
-temperature = st.slider("Temperature", min_value=0.1, max_value=2.0, value=1.0, step=0.1)
+temperature = st.slider("Temperature", min_value=0.1, max_value=2.0, value=1.0, step=0.01)
 
 modified_probabilities = scale_probabilities(probabilities, temperature)
 
