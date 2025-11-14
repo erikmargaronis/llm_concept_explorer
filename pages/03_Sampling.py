@@ -4,7 +4,6 @@ import numpy as np
 from utils.sampling import scale_probabilities, sample_next_word, samples_to_probability_distribution, normalize_probabilities
 from utils.plot import plot_bar_chart_probability_distribution
 
-#st.set_page_config(layout="wide")
 st.title("Sampling Strategies")
 st.subheader("Random Sampling")
 st.write("""In modern LLM's, the defacto standard method to select the next token is to randomly sample the probability distribution over the model's vocabulary.

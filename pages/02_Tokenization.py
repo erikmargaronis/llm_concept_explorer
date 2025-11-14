@@ -2,7 +2,6 @@ import streamlit as st
 import tiktoken
 import html
 
-#st.set_page_config(layout="wide")
 enc = tiktoken.encoding_for_model("gpt-4o")
 
 st.title("Tokenization")
