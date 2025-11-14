@@ -4,11 +4,12 @@ st.set_page_config(
     page_title="LLM Companion App",
     layout="wide",
 )
-st.title("LLM Companion App")
+st.title("LLM Concept Explorer")
 
 
-st.write("Welcome to the LLM Companion App! Use the sidebar to navigate.")
+st.write("""Welcome to this LLM concept explorer.
 
-st.sidebar.page_link("pages/tokenization.py", label="Tokenization")
-st.sidebar.page_link("pages/sampling.py", label="Sampling")
-st.sidebar.page_link("pages/prompt.py", label="Prompt")
+On this site you can explore some of the concepts related to LLMs.
+
+The page is intended to be a learning tool for people that are new to LLMs and want to understand the concepts behind them.""")
+
