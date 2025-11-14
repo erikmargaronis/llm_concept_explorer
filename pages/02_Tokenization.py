@@ -1,6 +1,6 @@
 import streamlit as st
 import tiktoken
-import html  # NEW
+import html
 
 #st.set_page_config(layout="wide")
 enc = tiktoken.encoding_for_model("gpt-4o")
@@ -37,7 +37,6 @@ with right:
         colored_tokens = []
         for t in tokens:
             piece = enc.decode([t]).replace("\n", "\\n")
-            # Escape HTML and preserve spaces
             piece = html.escape(piece).replace(" ", "&nbsp;")
             colored_tokens.append(
                 f"<span title='{t}' style='background:{token_color(t)}22; "
