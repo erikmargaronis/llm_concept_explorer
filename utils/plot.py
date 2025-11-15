@@ -1,10 +1,24 @@
 import matplotlib.pyplot as plt
 import streamlit as st
 
+def plot_distribution(probs, title, vocab):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(range(len(probs)), probs, tick_label=vocab, alpha=0.7, color="skyblue", edgecolor="black")
+    ax.set_ylim(0, 1)
+    ax.set_title(title)
+    ax.set_xlabel("Token")
+    ax.set_ylabel("Probability")
+
+    st.pyplot(fig)
+    plt.close(fig)
+
 def plot_bar_chart_probability_distribution(
     probabilities,
     modified_probabilities,
-    candidate_words
+    candidate_words,
+    title = "",
+    xlabel = "Candidate Words",
+    ylabel = "Probability"
 ):
     fig_combined, ax_combined = plt.subplots(figsize=(8, 4))
     ax_combined.bar(
@@ -22,13 +36,13 @@ def plot_bar_chart_probability_distribution(
             modified_probabilities,
             color='skyblue',
             edgecolor='black',
-            label='Temperature-Scaled Distribution',
+            label='Modified Distribution',
             alpha=0.7
         )
 
-    ax_combined.set_xlabel("Candidate Words")
-    ax_combined.set_ylabel("Probability")
-    ax_combined.set_title("Initial vs. Temperature-Scaled Probability Distribution")
+    ax_combined.set_xlabel(xlabel)
+    ax_combined.set_ylabel(ylabel)
+    ax_combined.set_title(title)
     ax_combined.tick_params(axis='x', rotation=45)
     ax_combined.legend(loc='upper right')
     #plt.tight_layout()
