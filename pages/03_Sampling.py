@@ -20,9 +20,7 @@ text_prefix = "I have a"
 
 vocabulary = ["dog", "cat", "dream", "book", "question", "plan", "car", "pen", "pet", "idea"]
 probabilities = np.array([0.45853809710312615, 0.40465845041054327, 0.07031908764647739, 0.015690313995143465, 0.015690313995143465, 0.012219628826053952, 0.010783784589726049, 0.0050938991521505715, 0.002406187582511743, 0.0006893842845350389])
-
 probabilities = probabilities / np.sum(probabilities)
-
 
 st.title("Understanding Sampling in LLMs")
 st.markdown("""Large Language Models (LLMs) produce text by predicting the next token (word, sub-word, or character) given a context. Under the hood, they produce a probability distribution over a vocabulary of possible next tokens. But how do we go from probabilities to an actual token choice? That’s where **sampling** comes in.""")
@@ -69,7 +67,6 @@ unsafe_allow_html=True
 )
 
 temperature = st.slider("Temperature", min_value=0.01, max_value=2.0, value=1.0, step=0.01)
-
 modified_probabilities = scale_probabilities(probabilities, temperature)
 
 plot_bar_chart_probability_distribution(
@@ -77,18 +74,7 @@ plot_bar_chart_probability_distribution(
     modified_probabilities,
     vocabulary,
     title = "Initial vs. Temperature-Scaled Probability Distribution"
-    )
-
-if False:
-    num_samples = st.slider("Number of Samples", min_value=1, max_value=100, value=1)
-
-    if st.button("Sample Next Word(s)", key="sample_next_word"):
-        sampled_words = sample_next_word(modified_probabilities, candidate_words, k=num_samples)
-        probability_distribution = samples_to_probability_distribution(sampled_words, candidate_words)
-        print(sampled_words)
-        print(probability_distribution)
-
-        plot_bar_chart_probability_distribution(probability_distribution, modified_probabilities, candidate_words)
+)
 
 st.divider()
 st.subheader("Top-k Sampling")
@@ -116,7 +102,6 @@ st.markdown(r"""**Top-p (or nucleus) sampling** chooses from the **smallest set 
 This method adapts dynamically to how peaked the distribution is. For a very peaked distribution, the top tokens might already exceed \(p\). For a flatter distribution, we might need more tokens.""")
 
 top_p_val = st.slider("Top-p", min_value=0.01, max_value=1.0, value=1.0, step=0.01)
-
 modified_probabilities = top_p_scaling(probabilities, top_p_val)
 
 plot_bar_chart_probability_distribution(
