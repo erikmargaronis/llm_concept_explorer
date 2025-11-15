@@ -1,8 +1,16 @@
 import streamlit as st
 import numpy as np
 
-from utils.sampling import scale_probabilities, sample_next_word, samples_to_probability_distribution, top_p_sampling
-from utils.plot import plot_bar_chart_probability_distribution, plot_distribution
+from utils.plot import (
+    plot_bar_chart_probability_distribution,
+    plot_distribution
+)
+from utils.sampling import (
+    scale_probabilities,
+    sample_next_word,
+    samples_to_probability_distribution,
+    top_p_sampling
+)
 
 text_prefix = "I have a"
 #candidate_words = ["cat", "dog", "house", "car", "dream", "pen", "book", "friend", "idea", "problem"]
