@@ -5,20 +5,24 @@ import html
 enc = tiktoken.encoding_for_model("gpt-4o")
 
 st.title("Tokenization")
-st.markdown("""Tokenization is the process of breaking text into small pieces—called tokens—that a language model can understand and work with.A token might be a whole word, part of a word, or even punctuation. Models don’t read text the way people do; they work with numbers. Tokenization provides a predictable way to turn text into numerical units the model can process.
+st.markdown("""Tokenization divides text into smaller units `tokens`that a model can interpret. A token can be a full word, a fragment, or a piece of punctuation. Instead of reading text in a human sense, the model processes numerical representations, and tokenization defines how each fragment becomes a number.
 
-This step is needed because it keeps the input consistent, manageable, and efficient. By using tokens instead of full sentences or paragraphs, the model can handle many languages, deal with rare or invented words, and operate at high speed. Tokenization is the bridge between human language and the numerical world in which these models operate.""")
+This procedure creates a consistent and efficient format for input. Working with tokens allows the system to handle many languages, absorb unusual or invented terms, and maintain speed. It forms the link between written language and the numerical space in which these systems function.""")
+
+st.markdown("""Type some text in the text field below to see how it gets tokenized.""")
 
 left, right = st.columns([1.1, 1])
 
 with left:
     text_input = st.text_area(
-        "Text",
+        "Text to tokenize",
         height=300,
-        placeholder="Type or paste text..."
+        placeholder="Type or paste text to tokenize...",
+        label_visibility="collapsed"
     )
 
-    if text_input:
+
+    if st.button("Tokenize") or text_input:
         tokens = enc.encode(text_input)
         st.metric("Token count", len(tokens))
 
@@ -33,9 +37,16 @@ with right:
             ]
             return colors[t % len(colors)]
 
+        def format_token_text(t: int) -> str:
+            s = enc.decode([t])
+            s = s.replace("\n", "\\n")
+            s = s.replace("\r", "\\r")
+            s = s.replace("`", "\\`")
+            return s
+
         colored_tokens = []
         for t in tokens:
-            piece = enc.decode([t]).replace("\n", "\\n")
+            piece = format_token_text(t)
             piece = html.escape(piece).replace(" ", "&nbsp;")
             colored_tokens.append(
                 f"<span title='{t}' style='background:{token_color(t)}22; "
@@ -45,14 +56,13 @@ with right:
                 "</span>"
             )
 
-
         st.markdown(
             f"""
             <div style="
                 border:1px solid #ddd; 
                 padding:10px; 
                 border-radius:6px;
-                height:350px; 
+                height:300px; 
                 overflow-y:scroll;
                 background:#fafafa;
                 white-space: pre-wrap;
@@ -64,7 +74,7 @@ with right:
         )
 
         token_pairs = [
-            f"`{enc.decode([t])}` → **{t}**"
+            f"`{format_token_text(t)}` → **{t}**"
             for t in tokens
         ]
         st.markdown("<br>".join(token_pairs), unsafe_allow_html=True)
