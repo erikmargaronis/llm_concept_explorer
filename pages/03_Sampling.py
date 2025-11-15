@@ -47,6 +47,7 @@ st.markdown("""In modern LLM's, the defacto standard method to select the next t
 Random sampling simply draws from the categorical distribution defined by the model's probabilities at each timestep. Each token's chance of being picked is precisely its probability.
 
 Other methods beside random sampling exist, with **Beam Search** and **Greedy Search** being the most prominent. These methods have been, and still are, often used in text generation. However they are not supported by the major LLM providers API's. OpenAI, Google, Anthropic and Ollama all use random sampling.""")
+st.markdown("""It's common to adjust the model’s probabilities before sampling because the raw distribution often contains modes that are either too dominant or too noisy for practical generation. Extremely peaked distributions can collapse into repetitive or deterministic outputs, while overly flat ones can amplify rare or incoherent tokens. By reshaping the distribution we can better control the balance between diversity and reliability. Let's explore some common ways to handle this.""")
 
 st.divider()
 st.subheader("Temperature-Scaled Sampling")
