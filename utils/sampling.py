@@ -9,7 +9,19 @@ def scale_probabilities(probabilities, temperature):
     scaled_probabilities = scaled_probabilities / np.sum(scaled_probabilities)
     return scaled_probabilities
 
-def top_p_sampling(probs, p):
+def top_k_scaling(probs, k):
+    """
+    Given a 1D numpy array of probabilities,
+    retains the k most probable tokens and sets the rest to zero.
+    """
+    idx = np.arange(len(probs))
+    keep_idx = idx[:k]
+    out = np.zeros_like(probs)
+    out[keep_idx] = probs[keep_idx]
+    out = out / np.sum(out)
+    return out
+
+def top_p_scaling(probs, p):
     """
     Given a 1D numpy array of probabilities,
     retains the minimal number of highest-probability entries
@@ -33,6 +45,26 @@ def top_p_sampling(probs, p):
     out[keep_idx] = selected_probs / selected_probs.sum()
 
     return out
+
+def min_p_scaling(probs: np.ndarray, p: float):
+    """
+    Takes a 1D numpy array of probabilities and applies minimum-p scaling.
+    Returns a new numpy array of normalized probabilities with the same length,
+    zeroing out entries below the threshold.
+    """
+    max_prob = probs.max()
+    threshold = max_prob * p
+
+    # Mask out probabilities below the threshold
+    mask = probs >= threshold
+    filtered = probs * mask
+
+    total = filtered.sum()
+    if total == 0:
+        # If everything got filtered out, return a uniform zero vector
+        return np.zeros_like(probs)
+
+    return filtered / total
 
 
 def sample_next_word(probabilities, candidate_words, k=1):
