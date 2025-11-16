@@ -1,13 +1,10 @@
 import numpy as np
 import streamlit as st
-import plotly.express as px
-from sympy.polys.rootoftools import I
 
 def load_embeddings():
     embeddings = np.load("assets/token_embeddings.npy")
     with open("assets/tokens.txt", "r") as f:
         tokens = f.read().splitlines()
-
     return embeddings, tokens
 
 embeddings, tokens = load_embeddings()
@@ -32,9 +29,8 @@ pill_css = """
 <style>
 .input-text {
     font-size: 1.5rem;
-    grid-column: 1 / -1;      /* span all columns */
+    grid-column: 1 / -1;
     text-align: center;
-    #font-size: 36px;
     line-height: 1;
 }
 
@@ -42,12 +38,12 @@ pill_css = """
     display: grid;
     column-gap: 0.5rem;
     row-gap: 0.5rem;
-    width: 100%;              /* anchored left/right inside Streamlit column */
+    width: 100%;
 }
 
 .pill-cell {
     display: flex;
-    justify-content: center;  /* center pill horizontally within cell */
+    justify-content: center;
     align-items: center;
 }
 
@@ -61,7 +57,7 @@ pill_css = """
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;          /* never wider than its grid cell */
+    max-width: 100%;
 }
 
 .embeddings {
@@ -74,44 +70,93 @@ pill_css = """
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;          /* never wider than its grid cell */
+    max-width: 100%;
 }
 
 .arrow-row {
-    grid-column: 1 / -1;      /* span all columns */
+    grid-column: 1 / -1;
     text-align: center;
     font-size: 36px;
     line-height: 1;
+}
+
+.fixed-button-container {
+    width: 100px;       /* set desired width */
+    margin: 0 auto;     /* center horizontally */
 }
 </style>
 """
 st.markdown(pill_css, unsafe_allow_html=True)
 
-n = len(tokens)  # number of columns
+# --- STEP STATE SETUP ---
+if "step" not in st.session_state:
+    # 0 = only input
+    # 1 = show tokens
+    # 2 = show token ids
+    # 3 = show embeddings
+    st.session_state.step = 0
 
-html = f'<div class="pill-layout" style="grid-template-columns: repeat({n}, 1fr);">'
+max_step = 3
 
-html += '<div class="input-text">The quick brown fox jumps over the lazy dog.</div>'
+def build_html(step: int) -> str:
+    """Build the HTML up to the given step."""
+    n = len(tokens)
+    html = f'<div class="pill-layout" style="grid-template-columns: repeat({n}, 1fr);">'
 
-html += '<div class="arrow-row">&#x2193;</div>'
+    # Step 0: input text only
+    html += '<div class="input-text">The quick brown fox jumps over the lazy dog.</div>'
 
-# Row 1: tokens
-for t in tokens:
-    html += f'<div class="pill-cell"><div class="pill">{t}</div></div>'
+    # Step 1: tokens
+    if step >= 1:
+        html += '<div class="arrow-row">&#x2193;</div>'
+        for t in tokens:
+            html += f'<div class="pill-cell"><div class="pill">{t}</div></div>'
 
-# Row 2: arrow spanning all columns
-html += '<div class="arrow-row">&#x2193;</div>'
+    # Step 2: token ids
+    if step >= 2:
+        html += '<div class="arrow-row">&#x2193;</div>'
+        for tid in token_ids:
+            html += f'<div class="pill-cell"><div class="pill">{tid}</div></div>'
 
-# Row 3: indices
-for tid in token_ids:
-    html += f'<div class="pill-cell"><div class="pill">{tid}</div></div>'
+    # Step 3: embeddings
+    if step >= 3:
+        html += '<div class="arrow-row">&#x2193;</div>'
+        for e in embeddings_as_str:
+            html += f'<div class="pill-cell"><div class="embeddings">{e}</div></div>'
 
-html += '<div class="arrow-row">&#x2193;</div>'
+    html += "</div>"
+    return html
 
-for e in embeddings_as_str:
-    html += f'<div class="pill-cell"><div class="embeddings">{e}</div></div>'
-    #html += f'<p style="font-size:8px;">{e}</p>'
 
-html += "</div>"
+left, middle, right = st.columns([1, 1, 1])
 
-st.markdown(html, unsafe_allow_html=True)
+with middle:
+    step_label = ["Tokenize", "Lookup IDs", "Lookup Embeddings", "Reset"]
+
+    with st.container():
+        # Inject CSS scoped to this column block
+        st.markdown("""
+        <style>
+        /* Target the first stButton inside this block only */
+        div[data-testid="stVerticalBlock"] div.stButton > button {
+            width: 170px;
+            height: 40px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        clicked = st.button(step_label[st.session_state.step])
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        if clicked:
+            if st.session_state.step == 3:
+                st.session_state.step = 0
+                st.rerun()
+            elif st.session_state.step < max_step:
+                st.session_state.step += 1
+                st.rerun()
+
+placeholder = st.empty()
+
+html = build_html(st.session_state.step)
+placeholder.markdown(html, unsafe_allow_html=True)
