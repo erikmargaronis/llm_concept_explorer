@@ -1,0 +1,3 @@
+# Content of pages/03_Embedding.py (placeholder)
+
+# ... (Actual content would be placed here) ...
