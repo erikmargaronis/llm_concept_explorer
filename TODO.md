@@ -10,11 +10,11 @@ This document outlines suggested improvements and additions to the LLM Concept E
 ### ✅ Implemented Pages
 - **02_Tokenization.py**: Interactive tokenization with visual token highlighting and token ID mapping
 - **05_Sampling.py**: Comprehensive exploration of sampling methods (temperature, top-k, top-p, min-p) with interactive probability distributions
-- **06_Explore.py**: Similar embedding exploration interface
+- **06_Explore.py**: Step-by-step embedding visualization showing text → tokens → token IDs → embeddings with interactive button progression
 
 ### ⚠️ Placeholder/Empty Pages
 - **01_Prompt.py**: Only placeholder text
-- **03_Embedding.py**: Empty file
+- **03_Embedding.py**: Empty file (content moved to 06_Explore.py)
 - **04_Generation.py**: Empty file
 - **07_Training.py**: Empty file
 
@@ -58,11 +58,29 @@ This document outlines suggested improvements and additions to the LLM Concept E
 
 **Implementation Approach**:
 - Use streaming API to show token-by-token generation
-- Create a step-by-step interface similar to the embedding page
+- Create a step-by-step interface similar to 06_Explore.py (with progressive button clicks)
 - Show probability distributions at each generation step
 - Allow users to "rewind" and see what would happen with different sampling choices
 
-### 1.3 Training Concepts (07_Training.py)
+### 1.3 Embedding Concepts (03_Embedding.py)
+**Goal**: Deep dive into embedding concepts beyond the basic visualization in 06_Explore.py
+
+**Suggested Features**:
+- **Embedding similarity**: Show how similar words have similar embeddings
+- **Embedding space visualization**: 2D/3D projection (t-SNE/PCA) of embeddings
+- **Semantic relationships**: Show how embeddings capture meaning
+- **Contextual embeddings**: Explain how embeddings change with context (if using contextual models)
+- **Embedding arithmetic**: Famous examples like "king - man + woman ≈ queen"
+- **Cosine similarity calculator**: Interactive tool to compare embeddings
+- **Embedding dimensions**: Explain what each dimension might represent
+
+**Implementation Approach**:
+- Build on the foundation from 06_Explore.py
+- Use the same embedding data but add more advanced visualizations
+- Create interactive tools for exploring embedding relationships
+- Use dimensionality reduction techniques for visualization
+
+### 1.4 Training Concepts (07_Training.py)
 **Goal**: Explain how LLMs are trained (simplified for non-technical audience)
 
 **Suggested Features**:
@@ -90,12 +108,12 @@ This document outlines suggested improvements and additions to the LLM Concept E
 - **Token efficiency**: Compare token counts for different phrasings
 - **Multilingual tokenization**: Show how different languages are tokenized
 
-### 2.2 Embedding Enhancements (03_Embedding.py)
-- **Embedding similarity**: Show how similar words have similar embeddings
-- **Embedding space visualization**: 2D/3D projection (t-SNE/PCA) of embeddings
-- **Semantic relationships**: Show how embeddings capture meaning
-- **Contextual embeddings**: Explain how embeddings change with context (if using contextual models)
-- **Embedding arithmetic**: Famous examples like "king - man + woman ≈ queen"
+### 2.2 Embedding Enhancements (06_Explore.py)
+- **Custom text input**: Allow users to input their own text instead of fixed example
+- **Multiple examples**: Add dropdown to switch between different example sentences
+- **Embedding values tooltip**: Show full embedding vector on hover
+- **Token-to-embedding mapping**: Better visualization of which token corresponds to which embedding
+- **Export functionality**: Allow users to export embeddings for further analysis
 
 ### 2.3 Sampling Enhancements (05_Sampling.py)
 - **Combined sampling methods**: Allow users to combine temperature + top-k + top-p
@@ -246,12 +264,13 @@ This document outlines suggested improvements and additions to the LLM Concept E
 
 ### Phase 1 (Immediate - 2-4 weeks)
 1. Complete **01_Prompt.py** with interactive prompt builder
-2. Complete **04_Generation.py** with step-by-step generation visualization
-3. Complete **07_Training.py** with simplified training concepts
-4. Add navigation improvements (progress tracking, learning path)
+2. Complete **03_Embedding.py** with advanced embedding concepts (similarity, visualization, arithmetic)
+3. Complete **04_Generation.py** with step-by-step generation visualization
+4. Complete **07_Training.py** with simplified training concepts
+5. Add navigation improvements (progress tracking, learning path)
 
 ### Phase 2 (Short-term - 1-2 months)
-1. Enhance existing pages (tokenization, embedding, sampling)
+1. Enhance existing pages (tokenization, 06_Explore.py, sampling)
 2. Add **08_Attention.py** with attention visualizations
 3. Improve UX (consistent styling, error handling, accessibility)
 4. Add code organization improvements
